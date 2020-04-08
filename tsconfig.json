@@ -13,7 +13,9 @@
       "moduleResolution": "node",
       "sourceMap": true,
       "rootDir": "src",
+      "resolveJsonModule":true,
       "outDir": "dist",
+      "experimentalDecorators": true,
       "baseUrl": ".",
       "paths": {
           "*": [

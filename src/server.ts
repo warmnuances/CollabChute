@@ -1,12 +1,24 @@
 // import http from 'http';
 import App from './app';
-import Path from 'path';
 import {Request, Response} from 'express';
+import userRoute from './routes/user.routes';
+import DbHelper from './config/database';
 
-const app = new App({}).getInstance();
+import SwaggerUI from 'swagger-ui-express';
+import SwaggerDoc from './public/swagger.json';
 
-app.get('/', (req:Request,res:Response) => {
-  res.send("hello World");
-})
+const APIVERSION = "/api/v1";
 
-app.listen(5000)
+const app = new App({
+  setReactAsViewEngine: true
+}).app;
+
+DbHelper.init();
+
+
+app.use(APIVERSION + '/user',userRoute);
+/** TO-DO: Update Swagger **/
+app.use(APIVERSION + '/swagger',  SwaggerUI.serve, SwaggerUI.setup(SwaggerDoc))
+
+
+app.listen(5001)

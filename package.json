@@ -11,11 +11,20 @@
   "author": "",
   "license": "CC-BY-NC-ND-4.0",
   "dependencies": {
-    "express": "^4.17.1"
+    "@types/express-validator": "^3.0.0",
+    "compression": "^1.7.4",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.6",
+    "swagger-ui-express": "^4.1.4"
   },
   "devDependencies": {
+    "@types/compression": "^1.7.0",
     "@types/express": "^4.17.3",
+    "@types/mongoose": "^5.7.7",
     "@types/node": "^13.9.3",
+    "@types/swagger-ui-express": "^4.1.2",
+    "dotenv": "^8.2.0",
+    "express-validator": "^6.4.0",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.2",
     "rimraf": "^3.0.2",
