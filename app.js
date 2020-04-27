@@ -6,7 +6,7 @@ const morgan = require('morgan');
 const path = require('path');
 
 /** Utils Import **/
-require("../server/utils/db");
+require("./utils/db");
 const { shouldCompress } = require("./utils/config");
 
 
