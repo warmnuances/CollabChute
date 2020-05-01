@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const path = require('path');
 
+
 /** Utils Import **/
 require("./utils/db");
 const { shouldCompress } = require("./utils/config");
@@ -12,6 +13,8 @@ const { shouldCompress } = require("./utils/config");
 
 /** Routes Import **/
 const userRoutes = require('./api/routes/user.routes.js');
+const projectRoutes = require('./api/routes/project.routes.js');
+const fileRoutes = require('./api/routes/file.routes.js');
 
 /** Constants**/
 const APIVERSION = "/v1/api";
@@ -38,6 +41,8 @@ app.get('*',(_, res) => {
 })
 
 app.use(APIVERSION + '/user', userRoutes);
+app.use(APIVERSION + '/project', projectRoutes);
+app.use(APIVERSION, fileRoutes);
 
 app.get("/test", (req,res, next) => {
   res.json("Hello")

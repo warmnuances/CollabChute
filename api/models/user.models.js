@@ -18,7 +18,11 @@ const userSchema = mongoose.Schema({
   username:{
     type: String ,
     required: true
-  }
+  },
+  roles: [{
+    project_name: String,
+    permissions: Array
+  }]
 })
 
 const User = mongoose.model('User',userSchema,'user');
