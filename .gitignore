@@ -1,6 +1,5 @@
 node_modules
 desktop.ini
-client
 *.ini
 **/desktop.ini
 
