@@ -1,11 +1,11 @@
 import React , { useState ,useEffect } from 'react';
 import io from 'socket.io-client';
-// import { Route, Switch } from 'react-router-dom';
-// import Landing from './Pages/Landing';
-// import SignIn from './Pages/SignIn';
-// import SignUp from './Pages/SignUp';
-// import WorkSpace from './Pages/WorkSpace';
-// import SignInForm from './components/form';
+import { Route, Switch } from 'react-router-dom';
+import Landing from './Pages/Landing';
+import SignIn from './Pages/SignIn';
+import SignUp from './Pages/SignUp';
+import WorkSpace from './Pages/WorkSpace';
+import NavigationBar from './controllers/NavigationBar';
 
 function App() {
   useEffect(() => {
@@ -17,16 +17,14 @@ function App() {
   })
   return (
     <div className="App">
-      <h1>Chat</h1>
-      {/* <Switch>
+      <NavigationBar />
+      <Switch>
         <Route exact path="/" component={Landing}/>
         <Route exact path="/signin" component={SignIn}/>
         <Route exact path="/signup" component={SignUp}/>
         <Route exact path="/workspace/:projid" component={WorkSpace}/>
-      </Switch> */}
+      </Switch>
       {/* <SignInForm /> */}
-
-
     </div>
   );
 }
