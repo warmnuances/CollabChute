@@ -31,3 +31,11 @@ exports.internalServerError = (res,msg) => {
     })
   )
 }
+
+exports.notImplemented = (res,msg) => {
+  return(
+    res.status(501).json({
+      "Error": msg || "Not Implemented"
+    })
+  )
+}

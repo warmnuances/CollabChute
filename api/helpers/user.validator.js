@@ -32,9 +32,11 @@ const signUp = base.concat([
   .withMessage("Invalid Character")
 ])
  
-/** JS Closure to create a generic and reusable function**/
+/** HOF to create a generic and reusable function**/
 const validate = (validations) => {
   return async (req, res, next) => {
+    console.log("Body", req.body)
+
     await Promise.all(validations.map(validation => validation.run(req)));
 
     const errors = validationResult(req);

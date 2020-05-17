@@ -3,4 +3,5 @@ desktop.ini
 client/node_modules
 *.ini
 **/desktop.ini
+/utils/comrs-8d4974d0386b.json
 

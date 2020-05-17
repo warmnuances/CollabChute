@@ -6,8 +6,17 @@ mongoose.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true ,
   useCreateIndex: true,
+  useFindAndModify: false
 })
-.then(() => console.log('MongoDB Connected...'))
+.then(() => {
+  console.log('MongoDB Connected...')
+})
 .catch(err => console.log("ERROR", err));
 
 module.exports = mongoose;
+
+
+
+function dsdsa(){
+
+}

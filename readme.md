@@ -72,14 +72,15 @@ Functionalities in a project(status):
 
 
 
-
-
-
 # Deploying docker image to heroku
 docker build -t warmnuances/collabchute .
-docker tag 1c6cb3aabe4f registry.heroku.com/collabchute/web 
+docker images
+docker tag 9fe5aab81f89 registry.heroku.com/collabchute/web 
 docker push registry.heroku.com/collabchute/web
 heroku container:release web --app collabchute
 
 # Running docker in localhost
 docker run --name collabchute-app -p 8080:5000 -d warmnuances/collabchute
+
+# Bash into container
+docker exec -it 505b041772ad bash

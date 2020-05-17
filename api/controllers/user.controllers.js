@@ -6,23 +6,54 @@ const { JWT_KEY } = require('../../utils/config.js');
 
 const saltRounds = 10;
 
+exports.RENEW_TOKEN = async(claims,_,res,__) => {
+  const { email, password } = claims;
+  const user = await User.findOne({email: email});
+
+  if(user){
+    const token = jwt.sign({
+      email: email,
+      password: password,
+      roles: user.roles
+    }, 
+    JWT_KEY, { expiresIn: 86400})
+    
+    res.cookie('token', token, { maxAge: 900000});
+    res.status(200).json({
+      id: user.id,
+      email: user.email,
+      roles: user.roles
+    })
+  }
+  else{
+    ErrorHelper.unauthorisedError(res);
+  }
+}
+
 
 exports.USER_SIGN_IN = async (req,res,next) => {
   const { email,password } = req.body;
 
   const user = await User.findOne({email: email});
+
   if(user){
     await bcrypt.compare(password, user.password, (err, comparedResult) => {
       if(err) ErrorHelper.unauthorisedError(res);
       if(comparedResult){
+
         //TODO: Change jwt alg to RS256
         const token = jwt.sign({
-          email: email
+          email: email,
+          password: password,
+          roles: user.roles
         }, 
         JWT_KEY, { expiresIn: 86400})
         
+        res.cookie('token', token, { maxAge: 900000, httpOnly: true});
         res.status(200).json({
-          token: token
+          id: user.id,
+          email: user.email,
+          roles: user.roles
         })
       }
       else{

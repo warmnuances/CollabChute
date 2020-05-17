@@ -4,14 +4,16 @@ import {
   SIGN_OUT
 } from '../Constants.js'
 
-const initialState = {};
+const initialState = {
+  user: {}
+};
 
 export default function(state = initialState, action){
   switch(action.type){
     case SIGN_IN:
       return{
         ...state,
-        message: action.message
+        user: action.payload
       }
     default:
       return state;

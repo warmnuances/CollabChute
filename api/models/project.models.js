@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
 const projectSchema = mongoose.Schema({
   project_name: {
@@ -7,6 +8,10 @@ const projectSchema = mongoose.Schema({
     unique: true
   },
   project_details: {
+    type: String,
+    require: true
+  },
+  visibility: {
     type: String,
     require: true
   },
@@ -31,6 +36,20 @@ const projectSchema = mongoose.Schema({
   },
   contributions: {
     type: String
+  },
+  chatGroups: [{
+    room_name: {
+      type: String,
+      require: true,
+      unique: true
+    },
+    members: []
+  }],
+  identifier: {
+    type: String,
+    default: function(){
+      return this.created_by + "/" +  this.project_name 
+    }
   }
 },
 {
