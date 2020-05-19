@@ -75,7 +75,7 @@ Functionalities in a project(status):
 # Deploying docker image to heroku
 docker build -t warmnuances/collabchute .
 docker images
-docker tag 9fe5aab81f89 registry.heroku.com/collabchute/web 
+docker tag 99a77db08c22 registry.heroku.com/collabchute/web 
 docker push registry.heroku.com/collabchute/web
 heroku container:release web --app collabchute
 
@@ -83,4 +83,10 @@ heroku container:release web --app collabchute
 docker run --name collabchute-app -p 8080:5000 -d warmnuances/collabchute
 
 # Bash into container
-docker exec -it 505b041772ad bash
+docker exec -it f961ba6f6005 bash
+
+#Set GCS Key 
+$env:GOOGLE_APPLICATION_CREDENTIALS="C:\Users\Hans\Projects\School\CollabChute\server\utils\comrs-8d4974d0386b.json"
+
+#move build
+mv build/* ../view

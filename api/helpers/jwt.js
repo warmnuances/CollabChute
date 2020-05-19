@@ -8,11 +8,12 @@ module.exports = (req,res,next) => {
 
     const token = req.cookies['token'];
     const decoded = jwt.verify(token, JWT_KEY);
-
+    
     
     next(decoded);
   }
   catch(error){
-    ErrorHelper.unauthorisedError(res, "You are not logged in")
+    console.log("FROM JWT")
+    ErrorHelper.unauthorisedError(next, "You are not logged in")
   }
 }

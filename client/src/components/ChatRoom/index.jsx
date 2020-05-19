@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 import { Transition } from 'react-spring/renderprops';
 import Card from '@material-ui/core/Card';
 import ChatContent from './content.jsx';
+import io from 'socket.io-client';
+import Button from '@material-ui/core/Button';
+import { withRouter } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    position: 'absolute',
+    zIndex: 999,
+    position: 'fixed',
     bottom: 88,
     right: 24,
   },
@@ -22,9 +25,68 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+let baseUrl ;
+if(process.env.NODE_ENV === "development"){
+  baseUrl = "http://localhost:5000";
+}
+else{
+  baseUrl = "https://collabchute.herokuapp.com/";
+}
+
+
+
 function ChatRoom(props) {
   const classes = useStyles();
-  const chatGroups = ['Group1','Group2','Group3']
+  const chatGroups = ['Main Chat'];
+
+  const { match } = props;
+ 
+
+  const [messages, setMessage] = useState([])
+  const [isConnected, setConnect] = useState(false);
+  const [_socket, setSocket] = useState(null);
+  
+
+  
+
+  React.useEffect(() => {
+    if(_socket){
+      _socket.on("messages", (data) => {
+        console.log(data)
+        setMessage(arr => [...arr,data]);
+      })
+  
+      return () => {
+        _socket.emit("forceDisconnect")
+      }
+    }
+  }, [_socket])
+
+
+  const onConnect = (e) => {
+    const projectName = match.params.projectname
+
+
+    const socket = io.connect(baseUrl);
+    setSocket(socket)
+    setConnect(true);
+    socket.emit("in:room",projectName);
+
+    socket.on('list:message',data => {
+      setMessage(data)
+    })
+
+  }
+
+  const onMessageSent = (e,msg) =>{
+    e.preventDefault();
+    const projectName = match.params.projectname
+
+    const data = Object.assign({});
+    data.message = msg;
+    data.roomName = projectName;
+    _socket.emit("send:message", data);
+  }
 
   return (
     <section className={classes.root}>
@@ -38,14 +100,18 @@ function ChatRoom(props) {
         
           <div style={props}>
             <Card className={classes.content} elevation={3}>
-              <ChatContent data={chatGroups}/>
+            {
+              isConnected ? 
+              <ChatContent data={chatGroups} messageList={messages} onMessage={onMessageSent}/>
+              :
+              <Button color="primary" onClick={onConnect}>Connect</Button>
+            }
             </Card>
           </div>)
-        
         }
       </Transition>
     </section>
   )
 }
 
-export default ChatRoom
+export default withRouter(ChatRoom)

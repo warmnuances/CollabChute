@@ -5,7 +5,14 @@ import RootReducer from './RootReducer.js';
 
 const initialState = {};
 
-const middleware = [thunk,logger];
+let middleware;
+
+if(process.env.NODE_ENV === "development"){
+  middleware = [thunk,logger];
+}
+else{
+  middleware = [thunk];
+}
 
 const store = createStore(
   RootReducer,

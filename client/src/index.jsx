@@ -4,7 +4,8 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 //Routers
-import { BrowserRouter as Router } from 'react-router-dom';
+import { Router } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
 
 //Theming
 import { ThemeProvider } from '@material-ui/core/styles';
@@ -18,7 +19,7 @@ import { Provider } from 'react-redux';
 ReactDOM.render(
   <React.StrictMode>
      <Provider store={store}>
-      <Router>
+      <Router history={createBrowserHistory()}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <App />

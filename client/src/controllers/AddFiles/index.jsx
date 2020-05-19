@@ -7,10 +7,13 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import Button from '@material-ui/core/Button';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import GetAppIcon from '@material-ui/icons/GetApp';
 import List from '@material-ui/core/List';
+import IconButton from '@material-ui/core/IconButton';
 
 import { connect } from 'react-redux';
-import { listFiles, addFile } from '../../redux/File/file.actions.js';
+import { addFile, downloadFiles } from '../../redux/File/file.actions.js';
 import { withRouter } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
@@ -33,15 +36,17 @@ const useStyles = makeStyles((theme) => ({
 
 function AddFiles(props) {
   const classes = useStyles();
-  const { match, listFiles, files, addFile } = props;
+
+  const { match, files, addFile, downloadFiles } = props;
 
   const onFileUpload = (e) => {
     addFile(match, e.target.files);
   }
 
-  React.useEffect(() => {
-    listFiles(match);
-  }, [listFiles, match])
+  const onDownload = (e) => {
+    const fileName = e.currentTarget.getAttribute('data');
+    downloadFiles(match,fileName);
+  }
 
   return (
     <Paper className={classes.root} elevation={1}>
@@ -61,6 +66,11 @@ function AddFiles(props) {
                       <ListItemText
                         primary={file}
                       />
+                       <ListItemSecondaryAction>
+                        <IconButton edge="end" aria-label="delete" onClick={onDownload} data={file}>
+                          <GetAppIcon/>
+                        </IconButton>
+                      </ListItemSecondaryAction>
                     </ListItem>
                   )
                 }) 
@@ -89,10 +99,5 @@ function AddFiles(props) {
   )
 }
 
-const mapStateToProps = (state) => {
-  return{
-    files: state.files.files
-  }
-}
 
-export default withRouter(connect(mapStateToProps, {listFiles, addFile} )(AddFiles));
+export default withRouter(connect(null, {addFile, downloadFiles} )(AddFiles));

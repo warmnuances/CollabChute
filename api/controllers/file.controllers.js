@@ -26,27 +26,22 @@ const upload = multer({
   }
 })
 
-
 const GCS = new Storage({projectId,keyFileName})
-
 
 /** Controller Logic **/
 exports.uploadConfig = upload;
 
 exports.ADD_FILE_TO_PROJECT = async (req,res,next) => {
-
-
   //TODO: RBAC for files
 
-  // (!project_name) && ErrorHelper.badRequesterror(res);
-  const { project_name } = req.query;
 
+  const { project_name } = req.query;
+  (!project_name) && ErrorHelper.badRequesterror(res);
   const fileBuffer = req.files[0];
-  console.log(fileBuffer)
-  if(fileBuffer){
-   
+
+  if(fileBuffer){ 
     const gcsname = Date.now() + fileBuffer.originalname;
-    const file = GCS.bucket(bucketName).file("collabchute" + '/'+gcsname);
+    const file = await GCS.bucket(bucketName).file(project_name + '/'+gcsname);
 
     const fileStream = file.createWriteStream({
       metadata: {
@@ -90,25 +85,30 @@ exports.LIST_ALL_FILES_IN_PROJECT = async (req,res,next) => {
 }
 
 exports.DOWNLOAD_FILE = async(req,res,next) => {
-  // const { file_name } = req.body;
+  const { project_name, file_name } = req.query;
 
-  const fileName = "collabchute/1589682349591CC1.JPG";
-
+  const fileName = file_name.split("/")[1];
+  const cwd = path.join(__dirname, '../../', 'temp');
 
   const options = {
-    // The path to which the file should be downloaded, e.g. "./file.txt"
-    destination: "temp/" + fileName,
+    destination: cwd + fileName,
   };
 
-  await storage.bucket(bucketName).file(fileName).download(options);
+  if(project_name){
+    const [files] = await GCS.bucket(bucketName).getFiles({prefix: project_name})
 
-  // if(project_name){
-  //   const [files] = await GCS.bucket(bucketName).getFiles({prefix: project_name})
-  //   const fileNames = files.map(file => file.name);
-
-  //   res.send(fileNames);
-  // }
-  // else{
-  //   ErrorHelper.badRequesterror(res);
-  // }  
+    files.forEach(async file => {
+      let currentFile = file.name.split("/")[1];
+      if(currentFile === fileName){
+        await GCS.bucket(bucketName).file(file.name).download(options);
+        res.download(cwd + fileName, fileName, (err) => {
+          err && ErrorHelper.internalServerError(res);
+        })
+      }
+    })
+    
+  }
+  else{
+    ErrorHelper.badRequesterror(res);
+  }  
 }

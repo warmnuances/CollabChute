@@ -50,8 +50,6 @@ function SignIn(props) {
 
   const onFormSubmit = (e) => {
     e.preventDefault()
-    console.log(input)
-
     const { userSignIn, history } = props;
     userSignIn(history,input);
     

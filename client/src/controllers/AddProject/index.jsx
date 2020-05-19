@@ -6,12 +6,16 @@ import GroupWorkIcon from '@material-ui/icons/GroupWork';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 
-import ToggleButton from '@material-ui/lab/ToggleButton';
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
-import LockIcon from '@material-ui/icons/Lock';
-import LockOpenIcon from '@material-ui/icons/LockOpen';
+// import ToggleButton from '@material-ui/lab/ToggleButton';
+// import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+// import LockIcon from '@material-ui/icons/Lock';
+// import LockOpenIcon from '@material-ui/icons/LockOpen';
 
 import GradientButton from '../../components/GradientButton';
+
+import { connect } from 'react-redux';
+import { addProject } from '../../redux/Project/project.actions';
+import { withRouter } from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -42,13 +46,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function AddProject() { 
+function AddProject(props) { 
   const classes = useStyles();
+  const { addProject, history } = props;
 
   const [project, setProject] = React.useState({
     name: '',
     details: '',
-    visibility: 'private',
   })
 
 
@@ -59,11 +63,24 @@ function AddProject() {
     })
   }
 
-  const onToggleVisibility = (e,value) => {
+  /** const onToggleVisibility = (e,value) => {
     setProject({
       ...project,
       "visibility":value
     })
+  }
+ */
+
+
+
+  const onAddProject = (e) => {
+    addProject(project, history);
+
+    setProject({
+      name: '',
+      details: '',
+    })
+   
   }
 
   return (
@@ -81,9 +98,8 @@ function AddProject() {
         </Typography>
 
 
-        <form
+        <div
           className={classes.projectForm}>
-
           <TextField
             onChange={onInputChange}
             name="name"
@@ -110,9 +126,8 @@ function AddProject() {
             multiline
             rows={4}
           />  
-
+{/* 
           <ToggleButtonGroup 
-
             exclusive
             className={classes.visibilityGroup}
             size="small" 
@@ -127,13 +142,13 @@ function AddProject() {
               <LockOpenIcon />
               <Typography variant="button"> Public</Typography>
             </ToggleButton> 
-          </ToggleButtonGroup>
+          </ToggleButtonGroup> */}
           
-          <GradientButton type="submit" text="Create Project"/>
-        </form>
+          <GradientButton type="submit" text="Create Project" onClick={onAddProject}/>
+        </div>
       </Paper>
     </section>
   )
 }
 
-export default AddProject
+export default connect(null, {addProject})(AddProject)

@@ -16,13 +16,13 @@ const signUp = base.concat([
   body('confirm_password')
   .custom((value, { req }) => value === req.body.password)
   .withMessage("Password does not match"),
-  body('name')
-  .not()
-  .isEmpty()
-  .trim() 
-  .escape()
-  .matches("^[a-zA-Z0-9_]*$")
-  .withMessage("Invalid Character"),
+  // body('name')
+  // .not()
+  // .isEmpty()
+  // .trim() 
+  // .escape()
+  // .matches("^[a-zA-Z0-9_]*$")
+  // .withMessage("Invalid Character"),
   body('username')
   .not()
   .isEmpty()

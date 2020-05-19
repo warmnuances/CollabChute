@@ -43,7 +43,6 @@ const useStyles = makeStyles((theme) => ({
 
 
 function Authentication(props) {
-  
 
   const classes = useStyles();
 

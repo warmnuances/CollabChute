@@ -1,22 +1,23 @@
 import {
-  LIST_FILES, ADD_FILES,
+  SET_LOADING,
+  SET_LOAD_FINISHED,
 } from '../Constants.js'
 
 const initialState = {
-  files: []
+  loader: false
 };
 
 export default function(state = initialState, action){
   switch(action.type){
-    case LIST_FILES:
+    case SET_LOADING:
       return{
         ...state,
-        files: action.payload
+        loader: true
       }
-    case ADD_FILES: 
+    case SET_LOAD_FINISHED:
       return{
         ...state,
-        files: [...state.files,action.payload]
+        loader: false
       }
     default:
       return state;

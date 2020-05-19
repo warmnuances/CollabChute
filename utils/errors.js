@@ -1,41 +1,39 @@
 /** functions for commonly used errors
  * **/
 
-exports.resourceNotFound = (res,msg) => {
-  return(
-    res.status(404).json({
-      "Error": msg || "Resource Not Found!"
-    })
-  )
+exports.resourceNotFound = (next,err) => {
+  err = err || "Resource Not Found!"
+  return next([err,404])
 }
-exports.badRequesterror = (res,msg) => {
-  return(
-    res.status(400).json({
-      "Error": msg || "Bad Request!"
-    })
-  )
+exports.badRequesterror = (next,err) => {
+  err = err || "Bad Request!"
+  return next([err,400])
 }
 
-exports.unauthorisedError = (res,msg) => {
-  return(
-    res.status(401).json({
-      "Error": msg || "Authentication Failed!"
-    })
-  )
+exports.unauthorisedError = (next,err) => {
+  err = err || "Authentication Failed!"
+  return next([err,401])
 }
 
-exports.internalServerError = (res,msg) => {
-  return(
-    res.status(500).json({
-      "Error": msg || "Internal Server Error"
-    })
-  )
+exports.internalServerError = (next,err) => {
+  err = err || "Internal Server Error"
+  return next([err,500])
 }
 
-exports.notImplemented = (res,msg) => {
-  return(
-    res.status(501).json({
-      "Error": msg || "Not Implemented"
+exports.notImplemented = (next,err) => {
+  err = err || "Not Implemented"
+  return next([err,501])
+}
+exports.resourceConflict = (next,err) => {
+  err = err || "Resource Conflict"
+  return next([err,409])
+}
+
+exports.ErrorMiddleware = (error,req,res,next) => {
+  if(!res.headerSet){
+    return res.status(error[1]).send({
+      "Error": error[0]
     })
-  )
+  }
+  
 }

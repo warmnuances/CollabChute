@@ -16,8 +16,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import AssessmentIcon from '@material-ui/icons/Assessment';
-import MailIcon from '@material-ui/icons/Mail';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
 import { Divider } from '@material-ui/core';
 
 import { Link } from "react-router-dom";
@@ -99,11 +97,14 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-function Sidebar() {
+function Sidebar(props) {
   const [showSide, setShowSide] = React.useState(true);
   const classes = useStyles();
 
-  const projectPath = "collabchute"
+  const { projects } = props;
+
+  React.useEffect(() => {
+  },[projects])
 
   const toggleDrawer = () =>   {
     setShowSide(!showSide);
@@ -135,6 +136,7 @@ function Sidebar() {
           </IconButton>
         </div>
         
+
         <LinkMui to={`/main/add-project`} component={Link} underline="none">
         {
           showSide? 
@@ -150,24 +152,29 @@ function Sidebar() {
             <Typography variant="h6" className={classes.sideBarTitle}>PROJECTS</Typography>:
             <Divider />
         }
-
-        <LinkMui className={classes.projectLink} to={`/main/project/${projectPath}`} component={Link} underline="none">
-          <ListItem button>
-            <ListItemIcon className={classes.itemIcon}><AssessmentIcon /></ListItemIcon>
-            <ListItemText primary="CollabChute" />
-          </ListItem>
-        </LinkMui>
-        
-
         <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon className={classes.itemIcon}>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-          </ListItem>
-        ))}
-        
+        {
+          projects.map((proj,index) => {
+            return(
+              <LinkMui 
+                key={index}
+                className={classes.projectLink} 
+                to={`/main/project/${proj}`} 
+                component={Link} 
+                underline="none">
+                <ListItem button>
+                  <ListItemIcon className={classes.itemIcon}>
+                    <AssessmentIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={proj} />
+                </ListItem>
+              </LinkMui>
+            )
+          })
+        }
         </List>
+
+
     </Drawer>
   )
 }

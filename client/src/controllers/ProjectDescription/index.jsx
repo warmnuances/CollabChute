@@ -6,7 +6,8 @@ import Typography from '@material-ui/core/Typography';
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(2),
-    width:'100%'
+    width:'100%',
+    height: '100%'
   },
   projectTitle: {
     fontWeight: 700
@@ -19,19 +20,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ProjectDescription() {
+function ProjectDescription(props) {
   const classes = useStyles();
-  
+  const { description, projectName } = props;
+
   return (
     <Paper className={classes.root} elevation={1}>
       <Typography className={classes.projectTitle} variant="h5" gutterBottom>
-        Collab Chute
+        {projectName}
       </Typography>
       <Typography className={classes.caption} display="block" variant="caption" gutterBottom>
-        This project aims to increase collaboration
+        Start Collaborating
       </Typography>
       <Typography className={classes.description} variant="body1" gutterBottom>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum esse ducimus nostrum! Totam corrupti voluptatum recusandae, veritatis ad ipsa explicabo delectus, incidunt dolorum facere nam laudantium dicta error, nesciunt amet.
+        {description}
       </Typography>
     </Paper>
   )

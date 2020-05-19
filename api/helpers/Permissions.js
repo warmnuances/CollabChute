@@ -47,12 +47,22 @@ class Admin{
       this.roles[res] = access.all
     })
   }
-
   getAccessList(){
     return this.roles
   }
 }
 
+class User{
+  constructor(){
+    this.roles = {}
+    Object.keys(resources).map(res =>{
+      this.roles[res] = access.read
+    })
+  }
+  getAccessList(){
+    return this.roles
+  }
+}
 
 
 /** Singleton Instance**/
@@ -67,6 +77,19 @@ const AdminInstance = (function(){
   })()
 
 })();
+
+const UserInstance = (function(){
+  let instance = null;
+
+  return (function(){
+    if(!instance){
+      instance = new User();
+    }
+    return instance;
+  })()
+
+})();
+
 
 const ACLInstance = (function(){
   let instance = null;
@@ -83,4 +106,5 @@ const ACLInstance = (function(){
 
 exports.acl = ACLInstance;
 exports.admin = AdminInstance;
+exports.userRole = UserInstance;
 

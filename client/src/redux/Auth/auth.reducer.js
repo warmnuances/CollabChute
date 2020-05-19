@@ -1,11 +1,9 @@
 import {
   SIGN_IN,
-  SIGN_UP,
-  SIGN_OUT
 } from '../Constants.js'
 
 const initialState = {
-  user: {}
+  user: { roles: [] }
 };
 
 export default function(state = initialState, action){
@@ -13,7 +11,7 @@ export default function(state = initialState, action){
     case SIGN_IN:
       return{
         ...state,
-        user: action.payload
+        user: action.payload.data
       }
     default:
       return state;

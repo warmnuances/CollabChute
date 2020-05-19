@@ -1,11 +1,19 @@
 import {
-  ADD_FILES,
   LIST_FILES,
+  ADD_FILES
 } from '../Constants.js'
 import Axios from 'axios';
 
+let baseUrl;
 
-const baseUrl = "https://collabchute.herokuapp.com/v1/api/file";
+if(process.env.NODE_ENV === "development"){
+  baseUrl = "http://localhost:5000/v1/api/file";
+}
+else{
+  baseUrl = "https://collabchute.herokuapp.com/v1/api/file";
+}
+
+
 
 export const addFile = (match, data) => dispatch =>{
   const projectName = match.params.projectname
@@ -24,8 +32,11 @@ export const addFile = (match, data) => dispatch =>{
     }
   })
   .then(response => {
-    console.log("called")
-    dispatch(listFiles(match))
+    dispatch({
+      type: ADD_FILES,
+      payload: response.data.fileName
+    })
+
   })
   .catch(err => {
     console.log(err);
@@ -33,8 +44,8 @@ export const addFile = (match, data) => dispatch =>{
  
 
 }
-export const listFiles = (match) => dispatch => {
-  const projectName = match.params.projectname
+export const listFiles = (projectName) => dispatch => {
+  Axios.defaults.withCredentials = true;
   Axios
     .get(baseUrl + '/list',{
       params: {
@@ -50,4 +61,28 @@ export const listFiles = (match) => dispatch => {
     .catch(err => {
       console.log(err)
     })
+}
+
+export const downloadFiles = (match, fileName) => dispatch => {
+  const projectName = match.params.projectname;
+
+  const fileNameExt = fileName.split("/").slice(1).join(",")
+  Axios
+  .get(baseUrl + '/download',{
+    params: {
+      project_name: projectName,
+      file_name: fileName
+    }
+  })
+  .then(response =>  {
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', fileNameExt);
+    document.body.appendChild(link);
+    link.click();
+  })
+  .catch(err => {
+    console.log(err)
+  })
 }

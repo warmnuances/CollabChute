@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const { ErrorMiddleware } = require('./utils/errors');
 
 /** Utils Import **/
 require("./utils/db");
@@ -44,11 +45,6 @@ app.use(express.static(viewEnginePath));
 
 
 
-/** Routes **/
-app.get('*',(_, res) => {
-  res.sendFile(viewEnginePath);
-})
-
 app.use(APIVERSION + '/user', userRoutes);
 app.use(APIVERSION + '/project', projectRoutes);
 app.use(APIVERSION + '/file', fileRoutes);
@@ -58,5 +54,17 @@ app.get("/test", (req,res, next) => {
   res.cookie('JWT', 'john doe', { maxAge: 900000, httpOnly: true });
   res.json("Cookie tester")
 });
+
+
+//Cleanup
+app.use(ErrorMiddleware);
+
+
+/** Routes **/
+app.get('*',(_, res) => {
+  res.sendFile(viewEnginePath);
+})
+
+
 
 module.exports = app;

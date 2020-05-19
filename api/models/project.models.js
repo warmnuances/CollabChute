@@ -23,7 +23,10 @@ const projectSchema = mongoose.Schema({
     type: [String],
   },
   todo: {
-    type: [String]
+    type: [{
+      todo: String,
+      done: Boolean
+    }]
   },
   members_count: {
     type: Number
@@ -40,10 +43,10 @@ const projectSchema = mongoose.Schema({
   chatGroups: [{
     room_name: {
       type: String,
-      require: true,
-      unique: true
+      require: true
     },
-    members: []
+    members: [],
+    chats: []
   }],
   identifier: {
     type: String,

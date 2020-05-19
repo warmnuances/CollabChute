@@ -9,7 +9,6 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import SendIcon from '@material-ui/icons/Send';
 import FormControl from '@material-ui/core/FormControl';
 import IconButton from '@material-ui/core/IconButton';
-import clsx from 'clsx';
 import ChatMessage from '../ChatMessages';
 
 
@@ -67,15 +66,10 @@ const useStyles = makeStyles((theme) => ({
 
 
 function TabPanel(props) {
-  const { children, value, index, ...other } = props;
+  const { messageList, onSendMessage, children, value, index, ...other } = props;
   const classes = useStyles();
 
-  const [message, setMessage] = React.useState();
-
-  const onSendMessage = (e) => {
-    e.preventDefault();
-    console.log("Clicked Send")
-  }
+  const [message, setMessage] = React.useState([]);
 
   const handleMessage = (e) => {
     setMessage(e.target.value)
@@ -92,7 +86,7 @@ function TabPanel(props) {
     >
       {value === index && (
         <div className={classes.wrapper}>
-        <ChatMessage />
+        <ChatMessage messages={messageList}/>
         <FormControl className={classes.input} variant="outlined">
 
           <OutlinedInput
@@ -105,7 +99,7 @@ function TabPanel(props) {
               <InputAdornment position="end">
                 <IconButton
                   aria-label="toggle password visibility"
-                  onClick={onSendMessage}
+                  onClick={(e) => onSendMessage(e,message)}
                   edge="end"
                 >
                   <SendIcon />
@@ -130,6 +124,11 @@ TabPanel.propTypes = {
 export default function VerticalTabs(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+  
+
+  const { onMessage, messageList } = props;
+  
+
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -153,7 +152,10 @@ export default function VerticalTabs(props) {
           {
             props.data.map((item, index) => {
               return(
-                <Tab className={classes.tabLabel} key={index} label={item} {...a11yProps(index)} />
+                <Tab 
+                  className={classes.tabLabel} 
+                  key={index} 
+                  label={item} {...a11yProps(index)} />
               )
             })
           }
@@ -162,7 +164,7 @@ export default function VerticalTabs(props) {
         {
           props.data.map((item, index) => {
             return(
-              <TabPanel key={index} value={value} index={index}/>
+              <TabPanel messageList={messageList} onSendMessage={onMessage} key={index} value={value} index={index}/>
             )
           })
         }

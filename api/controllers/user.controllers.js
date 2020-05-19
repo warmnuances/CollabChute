@@ -18,7 +18,7 @@ exports.RENEW_TOKEN = async(claims,_,res,__) => {
     }, 
     JWT_KEY, { expiresIn: 86400})
     
-    res.cookie('token', token, { maxAge: 900000});
+    res.cookie('token', token, { maxAge: 900000 });
     res.status(200).json({
       id: user.id,
       email: user.email,
@@ -26,7 +26,7 @@ exports.RENEW_TOKEN = async(claims,_,res,__) => {
     })
   }
   else{
-    ErrorHelper.unauthorisedError(res);
+    ErrorHelper.unauthorisedError(next);
   }
 }
 
@@ -38,7 +38,7 @@ exports.USER_SIGN_IN = async (req,res,next) => {
 
   if(user){
     await bcrypt.compare(password, user.password, (err, comparedResult) => {
-      if(err) ErrorHelper.unauthorisedError(res);
+      if(err) ErrorHelper.unauthorisedError(next);
       if(comparedResult){
 
         //TODO: Change jwt alg to RS256
@@ -47,9 +47,9 @@ exports.USER_SIGN_IN = async (req,res,next) => {
           password: password,
           roles: user.roles
         }, 
-        JWT_KEY, { expiresIn: 86400})
+        JWT_KEY, { expiresIn: 86400}) 
         
-        res.cookie('token', token, { maxAge: 900000, httpOnly: true});
+        res.cookie('token', token, { maxAge: 900000});
         res.status(200).json({
           id: user.id,
           email: user.email,
@@ -57,12 +57,12 @@ exports.USER_SIGN_IN = async (req,res,next) => {
         })
       }
       else{
-        ErrorHelper.unauthorisedError(res);
+        ErrorHelper.unauthorisedError(next);
       }
     })
   }
   else{
-    ErrorHelper.unauthorisedError(res);
+    ErrorHelper.unauthorisedError(next);
   }
   
 }
@@ -70,18 +70,17 @@ exports.USER_SIGN_IN = async (req,res,next) => {
 exports.USER_SIGN_UP = async (req,res,next) => {
 
   const { email,password,name,username } = req.body;
-  (!email || !password || !name || !username) && ErrorHelper.badRequesterror(res,err);
+  (!email || !password || !name || !username) && ErrorHelper.badRequesterror(next,err);
 
   const user = await User.findOne({email: email})
 
   if(user){
-    ErrorHelper.badRequesterror(res, "Resource Conflict"); 
+    ErrorHelper.badRequesterror(next, "Resource Conflict"); 
   }
   else{
     await bcrypt
       .hash(password,saltRounds)
       .then( hash => {
-        console.log(hash);
         if(hash){
           const currentUser = new User({
             email: email,
@@ -101,7 +100,7 @@ exports.USER_SIGN_UP = async (req,res,next) => {
           })
           .catch(err => {
             const errmsg = err.message
-            ErrorHelper.internalServerError(res,errmsg)
+            ErrorHelper.internalServerError(next,errmsg)
           })
         }
     })

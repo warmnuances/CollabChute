@@ -14,11 +14,12 @@ import Avatar from '@material-ui/core/Avatar';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
+import { userSignOut } from '../../redux/Auth/auth.actions';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom'; 
+
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
   title: {
     flexGrow: 1,
     color: theme.palette.fontDefault,
@@ -39,25 +40,29 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function AppBarComponent() {
+function AppBarComponent({user, userSignOut, history}) {
   const classes = useStyles();
+
   let location = useLocation();
 
-  const [user, setUser] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleClose = (e) => {
+    console.log()
+    if(e.currentTarget.getAttribute('intent') === 'logout'){
+      userSignOut(history);
+    }
     setAnchorEl(null);
   };
 
   let lastPath = location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
 
   return (
-    <div className={classes.root}>
+    <>
       <AppBar className={classes.appBar} position="static" elevation={1}>
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
@@ -95,14 +100,14 @@ function AppBarComponent() {
         >
           <MenuItem onClick={handleClose}>Profile</MenuItem>
           <MenuItem onClick={handleClose}>My account</MenuItem>
-          <MenuItem onClick={handleClose}>Logout</MenuItem>
+          <MenuItem onClick={handleClose} intent="logout">Logout</MenuItem>
         </Menu>
       </div>
 
 
-    </div>
+    </>
   )
 }
 
 
-export default AppBarComponent
+export default withRouter(connect(null, {userSignOut})(AppBarComponent))

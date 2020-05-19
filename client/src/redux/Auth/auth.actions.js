@@ -1,11 +1,18 @@
 import {
   SIGN_IN,
-  SIGN_UP,
-  SIGN_OUT
 } from '../Constants.js'
 import Axios from 'axios';
+import { setLoading, setLoadFinished } from '../Loading/loader.action'
 
-const baseUrl = "https://collabchute.herokuapp.com/v1/api/user";
+
+let baseUrl;
+
+if(process.env.NODE_ENV === "development"){
+  baseUrl = "http://localhost:5000/v1/api/user";
+}
+else{
+  baseUrl = "https://collabchute.herokuapp.com/v1/api/user";
+}
 
 //Todo: Session management
 export const renewToken = (history) => async dispatch => {
@@ -35,19 +42,30 @@ export const renewToken = (history) => async dispatch => {
   }
 }
 
-export const userSignIn = (history, data) => async dispatch => {
+export const userSignIn = (history, data) => dispatch => {
+  dispatch(setLoading());
+
   Axios.post(baseUrl + '/signin',data,{withCredentials: true})
   .then(response => {
-      console.log(response);
-      localStorage.setItem("user", JSON.stringify(response.data))
-      history.push("/main/home")
+    dispatch(setLoadFinished())
+
+    sessionStorage.setItem("user", JSON.stringify(response.data))
+    history.push("/main/home")
+
     dispatch({
       type: SIGN_IN,
       payload: response
     })
   })
   .catch(err => {
-    console.log(err.response)
+    dispatch(setLoadFinished())
+    history.push("/error")
   })
 
+}
+
+export const userSignOut = (history) => dispatch =>{
+  //TODO: invalidate tokens
+  sessionStorage.removeItem("user");
+  history.push("/auth/signin");
 }
