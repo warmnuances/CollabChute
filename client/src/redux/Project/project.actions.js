@@ -3,7 +3,6 @@ import {
   ADD_MEMBER,
   ADD_TODOS,
   UPDATE_TODOS,
-  ADD_PROJECT,
   GET_PROJECT,
   SIGN_IN
 } from '../Constants.js';

@@ -19,22 +19,22 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-function LeftAlignText({text}){
-  const { LeftAlignText } = useStyles();
-  return(
-    <Typography className={LeftAlignText} variant="body1" gutterBottom>
-      {text}
-    </Typography>
-  )
-}
-function RightAlignText({text}){
-  const { RightAlignText } = useStyles();
-  return(
-    <Typography className={RightAlignText} variant="body1" gutterBottom>
-      {text}
-    </Typography>
-  )
-}
+// function LeftAlignText({text}){
+//   const { LeftAlignText } = useStyles();
+//   return(
+//     <Typography className={LeftAlignText} variant="body1" gutterBottom>
+//       {text}
+//     </Typography>
+//   )
+// }
+// function RightAlignText({text}){
+//   const { RightAlignText } = useStyles();
+//   return(
+//     <Typography className={RightAlignText} variant="body1" gutterBottom>
+//       {text}
+//     </Typography>
+//   )
+// }
 
 function ChatMessages(props) {
   const classes = useStyles();

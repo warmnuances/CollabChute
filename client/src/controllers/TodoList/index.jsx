@@ -20,7 +20,6 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: '100%',
     padding: theme.spacing(1),
-    maxWidth: 360,
     backgroundColor: theme.palette.background.paper,
   },
   list: {

@@ -36,7 +36,7 @@ exports.ADD_FILE_TO_PROJECT = async (req,res,next) => {
 
 
   const { project_name } = req.query;
-  (!project_name) && ErrorHelper.badRequesterror(res);
+  if(!project_name) ErrorHelper.badRequesterror(next);
   const fileBuffer = req.files[0];
 
   if(fileBuffer){ 
@@ -69,9 +69,29 @@ exports.ADD_FILE_TO_PROJECT = async (req,res,next) => {
     ErrorHelper.badRequesterror(res, "File Not Supported")
   }
 } 
+// exports.LIST_FILES_IN_PROJECT = async (req,res,next) => {
+//   const { project_name } = req.query;
 
-exports.LIST_ALL_FILES_IN_PROJECT = async (req,res,next) => {
+//   console.log("Cookies: ", req.cookies);
+
+
+  
+
+// }
+
+exports.LIST_ALL_FILES_IN_PROJECT = async (user,req,res,next) => {
   const { project_name } = req.query;
+  console.log("Name:", project_name);
+
+
+  // if(!user){} ErrorHelper.unauthorisedError(next);
+
+  // const targetRole = user.roles.find(role => role.project_name == project_name);
+  // console.log("Target", targetRole)
+
+  // console.log(project_name);
+  
+
 
   if(project_name){
     const [files] = await GCS.bucket(bucketName).getFiles({prefix: project_name})
@@ -80,7 +100,7 @@ exports.LIST_ALL_FILES_IN_PROJECT = async (req,res,next) => {
     res.send(fileNames);
   }
   else{
-    ErrorHelper.badRequesterror(res);
+    ErrorHelper.badRequesterror(next);
   }  
 }
 
@@ -102,13 +122,13 @@ exports.DOWNLOAD_FILE = async(req,res,next) => {
       if(currentFile === fileName){
         await GCS.bucket(bucketName).file(file.name).download(options);
         res.download(cwd + fileName, fileName, (err) => {
-          err && ErrorHelper.internalServerError(res);
+          if(err) ErrorHelper.internalServerError(next);
         })
       }
     })
     
   }
   else{
-    ErrorHelper.badRequesterror(res);
+    ErrorHelper.badRequesterror(next);
   }  
 }

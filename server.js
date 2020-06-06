@@ -8,3 +8,6 @@ InjectSocketIO(server);
 
 
 server.listen(port,()=> console.log(`Connected to ${port}`))
+
+
+module.exports = server;

@@ -15,7 +15,6 @@ import GradientButton from '../../components/GradientButton';
 
 import { connect } from 'react-redux';
 import { addProject } from '../../redux/Project/project.actions';
-import { withRouter } from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -62,14 +61,6 @@ function AddProject(props) {
       [e.target.name]:e.target.value
     })
   }
-
-  /** const onToggleVisibility = (e,value) => {
-    setProject({
-      ...project,
-      "visibility":value
-    })
-  }
- */
 
 
 

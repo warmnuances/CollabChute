@@ -9,7 +9,7 @@ const {
 const jwtValidator = require('../helpers/jwt.js');
 
 router.post("/upload",uploadConfig.any(),ADD_FILE_TO_PROJECT);
-router.get("/list", LIST_ALL_FILES_IN_PROJECT);
+router.get("/list", jwtValidator,LIST_ALL_FILES_IN_PROJECT);
 router.get("/download", DOWNLOAD_FILE);
 
 

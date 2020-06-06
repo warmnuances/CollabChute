@@ -1,5 +1,5 @@
 import {
-  SIGN_IN,
+  SIGN_IN, SIGN_UP,
 } from '../Constants.js'
 import Axios from 'axios';
 import { setLoading, setLoadFinished } from '../Loading/loader.action'
@@ -54,6 +54,35 @@ export const userSignIn = (history, data) => dispatch => {
 
     dispatch({
       type: SIGN_IN,
+      payload: response
+    })
+  })
+  .catch(err => {
+    dispatch(setLoadFinished())
+    history.push("/error")
+  })
+
+}
+
+export const userSignUp = (history, data) => dispatch => {
+  const body = {
+    email: data.email,
+    password: data.password,
+    confirm_password: data.confirm_password,
+    name: data.name,
+    username: data.name
+  }
+
+  dispatch(setLoading());
+
+
+  Axios.post(baseUrl + '/signup',body,{withCredentials: true})
+  .then(response => {
+    dispatch(setLoadFinished())
+    console.log(response)
+    history.push(baseUrl +"/signin")
+    dispatch({
+      type: SIGN_UP,
       payload: response
     })
   })

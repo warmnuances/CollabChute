@@ -3,7 +3,6 @@ import {
   UPDATE_TODOS,
   GET_PROJECT,
   ADD_TODOS,
-  ADD_PROJECT,
 } from '../Constants.js'
 
 const initialState = {

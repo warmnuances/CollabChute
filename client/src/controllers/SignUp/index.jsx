@@ -6,10 +6,12 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, withRouter } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
 import FaceIcon from '@material-ui/icons/Face';
 import EnhancedEncryptionIcon from '@material-ui/icons/EnhancedEncryption';
+import { connect } from 'react-redux';
+import { userSignUp } from '../../redux/Auth/auth.actions'; 
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,7 +33,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function SignIn() {
+function SignUp(props) {
+  const { userSignUp, history } = props;
+
   const [input, setInput] = React.useState({
     name:'',
     email: '',
@@ -42,7 +46,6 @@ function SignIn() {
   const classes = useStyles();
 
   const onInputChange = (e) =>{
-    console.log(input)
     setInput({
       ...input,
       [e.target.name]:e.target.value
@@ -51,7 +54,7 @@ function SignIn() {
 
   const onFormSubmit = (e) => {
     e.preventDefault()
-    console.log("dasdasd")
+    userSignUp(history,input);
   }
   
   return (
@@ -60,7 +63,7 @@ function SignIn() {
         onChange={onInputChange}
         name="name"
         label="Name"
-        id="outlined-margin-dense"
+        id="outlined-margin-dense-name"
         className={classes.textField}
         margin="dense"
         variant="filled"
@@ -76,11 +79,11 @@ function SignIn() {
         onChange={onInputChange}
         name="email"
         label="Email"
-        id="outlined-margin-dense"
+        id="outlined-margin-dense-email"
         className={classes.textField}
         margin="dense"
         variant="filled"
-        value={input.name}
+        value={input.email}
         InputProps={{
           startAdornment: 
           <InputAdornment position="start">
@@ -93,7 +96,7 @@ function SignIn() {
         name="password"
         type="password"
         label="Password"
-        id="outlined-margin-dense"
+        id="outlined-margin-dense-password"
         className={classes.textField}
         margin="dense"
         variant="filled"
@@ -110,11 +113,11 @@ function SignIn() {
         name="confirmPassword"
         type="password"
         label="Confirm Password"
-        id="outlined-margin-dense"
+        id="outlined-margin-dense-cfmPwd"
         className={classes.textField}
         margin="dense"
         variant="filled"
-        value={input.password}
+        value={input.confirmPassword}
         InputProps={{
           startAdornment: 
           <InputAdornment position="start">
@@ -135,4 +138,4 @@ function SignIn() {
   )
 }
 
-export default SignIn
+export default withRouter(connect(null, {userSignUp})(SignUp))
