@@ -40,14 +40,3 @@ exports.shouldCompress = (req,res) => {
   }
   return compression.filter(req,res);
 }
-
-exports.firebaseConfig = {
-  apiKey: "AIzaSyC_Lk49Np5IhxAEmX_s2Vy6xPprc6fb4X4",
-  authDomain: "collabchute.firebaseapp.com",
-  databaseURL: "https://collabchute.firebaseio.com",
-  projectId: "collabchute",
-  storageBucket: "collabchute.appspot.com",
-  messagingSenderId: "722142906119",
-  appId: "1:722142906119:web:a3361c6be83345316a67a2",
-  measurementId: "G-ZE4Z082QJ5"
-}
